@@ -1,10 +1,11 @@
 package grifts
 
 import (
-  "github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/go_with_jwt/actions"
+	"go_with_jwt/actions"
+
+	"github.com/gobuffalo/buffalo"
 )
 
 func init() {
-  buffalo.Grifts(actions.App())
+	buffalo.Grifts(actions.App())
 }

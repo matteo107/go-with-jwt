@@ -6,6 +6,10 @@ import (
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
+
+	contenttype "github.com/gobuffalo/mw-contenttype"
+	"github.com/gobuffalo/x/sessions"
+	"github.com/rs/cors"
 )
 
 // ENV is used to help switch settings based on where the
@@ -29,8 +33,12 @@ var app *buffalo.App
 func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.New(buffalo.Options{
-			Env:         ENV,
-      SessionName: "_go_with_jwt_session",
+			Env:          ENV,
+			SessionStore: sessions.Null{},
+			PreWares: []buffalo.PreWare{
+				cors.Default().Handler,
+			},
+			SessionName: "_go_with_jwt_session",
 		})
 
 		// Automatically redirect to SSL
@@ -38,6 +46,9 @@ func App() *buffalo.App {
 
 		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
+
+		// Set the request content type to JSON
+		app.Use(contenttype.Set("application/json"))
 
 		app.GET("/", HomeHandler)
 	}
