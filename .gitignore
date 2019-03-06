@@ -25,5 +25,5 @@ node_modules/
 dist/
 generated/
 .vendor/
-.key
-.key.pub
+*.key
+*.key.pub
